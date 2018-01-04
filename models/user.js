@@ -31,7 +31,7 @@ userSchema.pre('save', function(done){
 // CHECK USER TYPED PASSWORD WITH DB PASSWORD
 userSchema.methods.checkPassword = function(guessPassword, done){
     bcrypt.compare(guessPassword, this.password, function(err, isMatch){
-        done(err, isMatch);
+        return done(err, isMatch);
     })
 }
 

@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-var passport = require('passport')
+var passport = require('passport');
+var localStrategy = require('passport-local')
+var cookie = require('cookie-parser')
 
 // SET LOCAL VARIABLES
 router.use(function(req, res, next){
@@ -52,6 +54,38 @@ router.get('/users/:username', function(req, res, next){
     if(!user){ return next(404); }
     res.render("profile", {user});
   });
+})
+
+router.get('/login', function(req, res, next){
+  res.render('login')
+});
+
+router.post('/login', passport.authenticate('local', {
+  successRedirect:'/edit',
+  failureRedirect: '/login',
+  failureFlash: true
+}),function(req, res){
+  res.render('error')
+});
+
+router.get('/logout', function(req, res, next){
+  req.logout();
+  res.redirect('/')
+});
+
+function ensureAuthentication(req, res, next){
+  console.log(req.isAuthenticated(), req.currentUser)    
+  if(req.isAuthenticated()){
+    next()
+  }
+  else{
+    req.flash('error', 'you must be login to see this page');
+    res.redirect('/login')
+  }
+}
+
+router.get('/edit', ensureAuthentication, function(req, res, next){
+  res.render('edit')
 })
 
 module.exports = router;

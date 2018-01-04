@@ -1,5 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var setuppassport = require('./setuppassport')
+var passport = require('passport')
 
 var path = require('path');
 var https = require('https');
@@ -7,7 +9,6 @@ var fs = require('fs');
 
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-
 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -21,6 +22,7 @@ mongoose.connect('mongodb://localhost/love-javascript', (err) => {
   if(err) console.log(err);
   console.log('CONNECTED')
 });
+setuppassport()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -32,11 +34,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'ase34=a2t44,.1231.,<KL>>//S23',
+  secret: 'SWEa)ase34=a2t4-^41231.,<KL>>//S23',
   resave: false,
   saveUninitialized: true,
 }));
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);

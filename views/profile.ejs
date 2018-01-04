@@ -1,5 +1,5 @@
 <% include _header%>
-<% if ((currentUser) && (currentUser.id === user.id)) { %>
+<% if ((currentUser)) { %>
 <a href="/edit" class="pull-right">Edit your profile</a>
 <% } %>
 <h1><%= user.name() %></h1>
